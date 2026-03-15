@@ -1,70 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Algo para ti</title>
+<title>Cielo</title>
 
 <style>
 
 body{
 margin:0;
+overflow:hidden;
 background:black;
 color:white;
 font-family:Arial;
-text-align:center;
-overflow:hidden;
 }
 
-#moon{
+/* pantalla inicio */
+
+#start{
 position:absolute;
-top:80px;
-left:50%;
-transform:translateX(-50%);
-width:180px;
-height:180px;
-border-radius:50%;
-background:#eee;
-box-shadow:0 0 40px white;
+width:100%;
+height:100vh;
 display:flex;
-align-items:center;
 justify-content:center;
-font-size:40px;
-color:black;
-}
-
-#bunny{
-font-size:60px;
-margin-top:250px;
-}
-
-button{
-padding:15px 30px;
-font-size:20px;
-border:none;
-border-radius:10px;
-background:pink;
+align-items:center;
+font-size:30px;
+background:black;
+z-index:5;
 cursor:pointer;
-margin-top:20px;
 }
 
-#acertijos{
-display:none;
-margin-top:20px;
+/* estrellas */
+
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+border-radius:50%;
+animation:twinkle 3s infinite alternate;
 }
 
-input{
-padding:10px;
-font-size:16px;
+@keyframes twinkle{
+from{opacity:0.3;}
+to{opacity:1;}
 }
 
-#mensaje{
-font-size:40px;
-margin-top:30px;
+/* estrellas fugaces */
+
+.shooting{
+position:absolute;
+width:3px;
+height:3px;
+background:white;
+box-shadow:0 0 10px white;
+animation:shoot 2s linear forwards;
 }
 
-#pregunta{
-display:none;
-margin-top:40px;
+@keyframes shoot{
+0%{
+transform:translate(0,0);
+opacity:1;
+}
+100%{
+transform:translate(400px,200px);
+opacity:0;
+}
+}
+
+/* constelaciones */
+
+.constellation line{
+stroke:white;
+stroke-width:1;
+stroke-dasharray:100;
+stroke-dashoffset:100;
+animation:draw 4s forwards;
+}
+
+@keyframes draw{
+to{
+stroke-dashoffset:0;
+}
+}
+
+/* mensaje final */
+
+#message{
+position:absolute;
+bottom:15%;
+width:100%;
+text-align:center;
+font-size:45px;
+opacity:0;
+transition:3s;
+letter-spacing:4px;
 }
 
 </style>
@@ -72,174 +101,97 @@ margin-top:40px;
 
 <body>
 
-<div id="moon">🌙</div>
+<div id="start">Haz clic para comenzar ✨</div>
 
-<div id="bunny">🐰🎀</div>
+<div id="message">Valery pasame la copia</div>
 
-<h1>Debo decirte algo...</h1>
+<div id="player" style="position:absolute;left:-9999px;"></div>
 
-<button onclick="empezar()">EMPEZAR</button>
+<svg class="constellation" width="100%" height="100%" style="position:absolute">
 
-<div id="acertijos">
+<line x1="200" y1="200" x2="250" y2="240"/>
+<line x1="250" y1="240" x2="300" y2="210"/>
+<line x1="300" y1="210" x2="340" y2="250"/>
 
-<p>Acertijo 1: ¿Cuánto es 2 + 2?</p>
-<input id="r1">
-<button onclick="check1()">OK</button>
+<line x1="600" y1="150" x2="650" y2="180"/>
+<line x1="650" y1="180" x2="700" y2="160"/>
+<line x1="700" y1="160" x2="740" y2="200"/>
 
-<div id="a2" style="display:none">
-
-<p>Acertijo 2: ¿Color del cielo?</p>
-<input id="r2">
-<button onclick="check2()">OK</button>
-
-</div>
-
-<div id="a3" style="display:none">
-
-<p>Acertijo 3: ¿Cuántos días tiene una semana?</p>
-<input id="r3">
-<button onclick="check3()">OK</button>
-
-</div>
-
-</div>
-
-<div id="mensaje"></div>
-
-<div id="pregunta">
-
-<h2>¿Quieres ser la aya de mi Mitsuki?</h2>
-
-<button onclick="si()">SI</button>
-<button onclick="no()">NO</button>
-
-</div>
-
-<div id="player" style="display:none"></div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
+</svg>
 
 <script>
 
-let player
+/* generar estrellas */
+
+for(let i=0;i<250;i++){
+
+let star=document.createElement("div");
+star.className="star";
+
+star.style.left=Math.random()*100+"vw";
+star.style.top=Math.random()*100+"vh";
+
+star.style.animationDelay=Math.random()*3+"s";
+
+document.body.appendChild(star);
+
+}
+
+/* estrellas fugaces */
+
+function shootingStar(){
+
+let star=document.createElement("div");
+star.className="shooting";
+
+star.style.left=Math.random()*window.innerWidth+"px";
+star.style.top=Math.random()*window.innerHeight/2+"px";
+
+document.body.appendChild(star);
+
+setTimeout(()=>star.remove(),2000);
+
+}
+
+setInterval(shootingStar,5000);
+
+/* API youtube */
+
+var tag=document.createElement('script');
+tag.src="https://www.youtube.com/iframe_api";
+document.head.appendChild(tag);
+
+var player;
 
 function onYouTubeIframeAPIReady(){
+
 player=new YT.Player('player',{
-height:'0',
-width:'0',
-videoId:'Xh6Qh8qkC5Q'
-})
+height:'1',
+width:'1',
+videoId:'OXq-JP8w5H4',
+playerVars:{
+'autoplay':0,
+'controls':0,
+'loop':1,
+'playlist':'OXq-JP8w5H4'
 }
-
-function empezar(){
-
-if(player){player.playVideo()}
-
-document.querySelector("button").style.display="none"
-
-document.getElementById("acertijos").style.display="block"
+});
 
 }
 
-function check1(){
-if(document.getElementById("r1").value==4){
-document.getElementById("a2").style.display="block"
-}
-}
+/* iniciar todo */
 
-function check2(){
-if(document.getElementById("r2").value.toLowerCase()=="azul"){
-document.getElementById("a3").style.display="block"
-}
-}
+document.getElementById("start").onclick=function(){
 
-function check3(){
-if(document.getElementById("r3").value==7){
-mensaje()
-}
-}
+this.style.display="none";
 
-function mensaje(){
+player.playVideo();
 
-let text="me gustas"
-let i=0
-let m=document.getElementById("mensaje")
+setTimeout(()=>{
+document.getElementById("message").style.opacity=1;
+},15000);
 
-let intervalo=setInterval(function(){
-
-m.innerHTML+=text[i]
-
-i++
-
-if(i>=text.length){
-clearInterval(intervalo)
-document.getElementById("pregunta").style.display="block"
-}
-
-},300)
-
-}
-
-function firework(){
-
-let f=document.createElement("div")
-f.innerHTML="✨"
-f.style.position="absolute"
-f.style.left=Math.random()*window.innerWidth+"px"
-f.style.top=Math.random()*window.innerHeight+"px"
-f.style.fontSize="30px"
-
-document.body.appendChild(f)
-
-setTimeout(()=>{f.remove()},2000)
-
-}
-
-function corazon(){
-
-let cx=window.innerWidth/2
-let cy=window.innerHeight/2
-
-for(let t=0;t<Math.PI*2;t+=0.1){
-
-let x=16*Math.pow(Math.sin(t),3)
-let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))
-
-let s=document.createElement("div")
-
-s.innerHTML="✨"
-s.style.position="absolute"
-
-s.style.left=cx+x*15+"px"
-s.style.top=cy+y*15+"px"
-
-s.style.fontSize="25px"
-
-document.body.appendChild(s)
-
-setTimeout(()=>{s.remove()},4000)
-
-}
-
-}
-
-function si(){
-
-document.getElementById("pregunta").style.display="none"
-
-document.getElementById("moon").innerHTML="MANI"
-
-for(let i=0;i<8;i++){
-setTimeout(firework,i*500)
-}
-
-setTimeout(corazon,2000)
-
-}
-
-function no(){
-alert("piénsalo otra vez 🐰")
-}
+};
 
 </script>
 
