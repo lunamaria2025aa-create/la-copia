@@ -45,26 +45,30 @@ from{opacity:0.3;}
 to{opacity:1;}
 }
 
-/* estrellas fugaces */
+/* cometas */
 
-.shooting{
+.comet{
 position:absolute;
-width:3px;
-height:3px;
+width:4px;
+height:4px;
 background:white;
-box-shadow:0 0 10px white;
-animation:shoot 2s linear forwards;
+border-radius:50%;
+box-shadow:0 0 20px white, -40px 0 40px rgba(255,255,255,0.4);
+animation:cometMove 4s linear forwards;
 }
 
-@keyframes shoot{
+@keyframes cometMove{
+
 0%{
-transform:translate(0,0);
+transform:translate(-200px,-200px);
 opacity:1;
 }
+
 100%{
-transform:translate(400px,200px);
+transform:translate(1200px,800px);
 opacity:0;
 }
+
 }
 
 /* constelaciones */
@@ -74,7 +78,7 @@ stroke:white;
 stroke-width:1;
 stroke-dasharray:100;
 stroke-dashoffset:100;
-animation:draw 4s forwards;
+animation:draw 5s forwards;
 }
 
 @keyframes draw{
@@ -96,6 +100,25 @@ transition:3s;
 letter-spacing:4px;
 }
 
+/* imagen final */
+
+#finalImage{
+margin-top:30px;
+width:300px;
+max-width:80%;
+border-radius:10px;
+box-shadow:0 0 20px rgba(255,255,255,0.5);
+opacity:0;
+animation:fadeIn 3s forwards;
+animation-delay:2s;
+}
+
+@keyframes fadeIn{
+to{
+opacity:1;
+}
+}
+
 </style>
 </head>
 
@@ -103,7 +126,16 @@ letter-spacing:4px;
 
 <div id="start">Haz clic para comenzar ✨</div>
 
-<div id="message">Valery pasame la copia</div>
+<div id="message">
+
+<div>Valery pasame la copia</div>
+
+<img 
+src="https://i.pinimg.com/1200x/b8/9c/0b/b89c0bf3a1f023cb5e1e0fab6e00ae74.jpg"
+id="finalImage"
+>
+
+</div>
 
 <div id="player" style="position:absolute;left:-9999px;"></div>
 
@@ -123,7 +155,7 @@ letter-spacing:4px;
 
 /* generar estrellas */
 
-for(let i=0;i<250;i++){
+for(let i=0;i<300;i++){
 
 let star=document.createElement("div");
 star.className="star";
@@ -137,25 +169,25 @@ document.body.appendChild(star);
 
 }
 
-/* estrellas fugaces */
+/* crear cometas */
 
-function shootingStar(){
+function createComet(){
 
-let star=document.createElement("div");
-star.className="shooting";
+let comet=document.createElement("div");
+comet.className="comet";
 
-star.style.left=Math.random()*window.innerWidth+"px";
-star.style.top=Math.random()*window.innerHeight/2+"px";
+comet.style.left=Math.random()*window.innerWidth+"px";
+comet.style.top=Math.random()*window.innerHeight/2+"px";
 
-document.body.appendChild(star);
+document.body.appendChild(comet);
 
-setTimeout(()=>star.remove(),2000);
+setTimeout(()=>comet.remove(),4000);
 
 }
 
-setInterval(shootingStar,5000);
+setInterval(createComet,7000);
 
-/* API youtube */
+/* youtube */
 
 var tag=document.createElement('script');
 tag.src="https://www.youtube.com/iframe_api";
@@ -179,7 +211,7 @@ playerVars:{
 
 }
 
-/* iniciar todo */
+/* iniciar */
 
 document.getElementById("start").onclick=function(){
 
